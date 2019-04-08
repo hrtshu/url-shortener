@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/jmcvetta/randutil"
+	"errors"
 )
 
 type UrlShortener struct {
@@ -11,6 +11,10 @@ type UrlShortener struct {
 
 func NewUrlShortener(db UrlShortenerDb, idSize int) *UrlShortener {
 	return &UrlShortener{db: db, idSize: idSize}
+}
+
+func (s *UrlShortener) IdSize() int {
+	return s.idSize
 }
 
 func (s *UrlShortener) Create(url string) (*ShortenedUrl, error) {
@@ -25,10 +29,17 @@ func (s *UrlShortener) Create(url string) (*ShortenedUrl, error) {
 		return shortened, nil
 	}
 
+	// check if url is invalid
+	/* Note: The definition of URL correctness may change.
+	   For this reason, validation is performed after DB search. */
+	if !isValidUrl(url) {
+		return nil, errors.New("invalid url")
+	}
+
 	// generate shortened url
 	var id string
 	for {
-		id, err = randutil.AlphaString(s.idSize)
+		id, err = generateId(s.idSize)
 		if err != nil {
 			return nil, err // TODO
 		}
@@ -40,7 +51,7 @@ func (s *UrlShortener) Create(url string) (*ShortenedUrl, error) {
 			break
 		}
 	}
-	shortened = &ShortenedUrl{original: url, id: id}
+	shortened = newShortenedUrl(url, id)
 
 	// register shortened url to db
 	err = s.db.Register(shortened)
