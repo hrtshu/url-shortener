@@ -1,6 +1,6 @@
 package core
 
-type ShortendUrl struct {
+type ShortenedUrl struct {
 	original string
 	id       string
 }

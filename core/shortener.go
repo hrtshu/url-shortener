@@ -13,7 +13,7 @@ func NewUrlShortener(db UrlShortenerDb, idSize int) *UrlShortener {
 	return &UrlShortener{db: db, idSize: idSize}
 }
 
-func (s *UrlShortener) Create(url string) (*ShortendUrl, error) {
+func (s *UrlShortener) Create(url string) (*ShortenedUrl, error) {
 	// TODO lock
 
 	// check if already created
@@ -40,7 +40,7 @@ func (s *UrlShortener) Create(url string) (*ShortendUrl, error) {
 			break
 		}
 	}
-	shortened = &ShortendUrl{original: url, id: id}
+	shortened = &ShortenedUrl{original: url, id: id}
 
 	// register shortened url to db
 	err = s.db.Register(shortened)
@@ -51,7 +51,7 @@ func (s *UrlShortener) Create(url string) (*ShortendUrl, error) {
 	return shortened, nil
 }
 
-func (s *UrlShortener) Resolve(id string) (*ShortendUrl, error) {
+func (s *UrlShortener) Resolve(id string) (*ShortenedUrl, error) {
 	shortened, err := s.db.Search(id)
 	if err != nil {
 		return nil, err // TODO

@@ -5,16 +5,16 @@ import (
 )
 
 type UrlShortenerArrayDb struct {
-	urls  []*ShortendUrl
+	urls  []*ShortenedUrl
 	count int
 }
 
 func NewUrlShortenerArrayDb(size int) *UrlShortenerArrayDb {
-	urls := make([]*ShortendUrl, size)
+	urls := make([]*ShortenedUrl, size)
 	return &UrlShortenerArrayDb{urls: urls}
 }
 
-func (d *UrlShortenerArrayDb) Register(shortened *ShortendUrl) error {
+func (d *UrlShortenerArrayDb) Register(shortened *ShortenedUrl) error {
 	if d.count >= len(d.urls) {
 		return errors.New("reached limit of url registrations")
 	}
@@ -24,7 +24,7 @@ func (d *UrlShortenerArrayDb) Register(shortened *ShortendUrl) error {
 	return nil
 }
 
-func (d *UrlShortenerArrayDb) Search(id string) (*ShortendUrl, error) {
+func (d *UrlShortenerArrayDb) Search(id string) (*ShortenedUrl, error) {
 	for i := 0; i < d.count; i++ {
 		if d.urls[i].id == id {
 			shortened := *(d.urls[i]) // copy
@@ -34,7 +34,7 @@ func (d *UrlShortenerArrayDb) Search(id string) (*ShortendUrl, error) {
 	return nil, nil
 }
 
-func (d *UrlShortenerArrayDb) SearchByUrl(original string) (*ShortendUrl, error) {
+func (d *UrlShortenerArrayDb) SearchByUrl(original string) (*ShortenedUrl, error) {
 	for i := 0; i < d.count; i++ {
 		if d.urls[i].original == original {
 			shortened := *(d.urls[i]) // copy
