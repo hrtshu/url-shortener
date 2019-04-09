@@ -51,7 +51,7 @@ func (s *UrlShortener) Create(url string) (*ShortenedUrl, error) {
 			break
 		}
 	}
-	shortened = newShortenedUrl(url, id)
+	shortened = NewShortenedUrl(url, id)
 
 	// register shortened url to db
 	err = s.db.Register(shortened)

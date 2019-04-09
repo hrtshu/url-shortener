@@ -9,7 +9,7 @@ type ShortenedUrl struct {
 	id       string
 }
 
-func newShortenedUrl(original string, id string) *ShortenedUrl {
+func NewShortenedUrl(original string, id string) *ShortenedUrl {
 	return &ShortenedUrl{original: original, id: id}
 }
 
