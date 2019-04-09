@@ -1,20 +1,21 @@
-package core
+package db
 
 import (
 	"errors"
+	"github.com/hrtshu/url-shortener/core"
 )
 
 type UrlShortenerArrayDb struct {
-	urls  []*ShortenedUrl
+	urls  []*core.ShortenedUrl
 	count int
 }
 
 func NewUrlShortenerArrayDb(size int) *UrlShortenerArrayDb {
-	urls := make([]*ShortenedUrl, size)
+	urls := make([]*core.ShortenedUrl, size)
 	return &UrlShortenerArrayDb{urls: urls}
 }
 
-func (d *UrlShortenerArrayDb) Register(shortened *ShortenedUrl) error {
+func (d *UrlShortenerArrayDb) Register(shortened *core.ShortenedUrl) error {
 	if d.count >= len(d.urls) {
 		return errors.New("reached limit of url registrations")
 	}
@@ -24,9 +25,9 @@ func (d *UrlShortenerArrayDb) Register(shortened *ShortenedUrl) error {
 	return nil
 }
 
-func (d *UrlShortenerArrayDb) Search(id string) (*ShortenedUrl, error) {
+func (d *UrlShortenerArrayDb) Search(id string) (*core.ShortenedUrl, error) {
 	for i := 0; i < d.count; i++ {
-		if d.urls[i].id == id {
+		if d.urls[i].Id() == id {
 			shortened := *(d.urls[i]) // copy
 			return &shortened, nil
 		}
@@ -34,9 +35,9 @@ func (d *UrlShortenerArrayDb) Search(id string) (*ShortenedUrl, error) {
 	return nil, nil
 }
 
-func (d *UrlShortenerArrayDb) SearchByUrl(original string) (*ShortenedUrl, error) {
+func (d *UrlShortenerArrayDb) SearchByUrl(original string) (*core.ShortenedUrl, error) {
 	for i := 0; i < d.count; i++ {
-		if d.urls[i].original == original {
+		if d.urls[i].Original() == original {
 			shortened := *(d.urls[i]) // copy
 			return &shortened, nil
 		}

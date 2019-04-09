@@ -2,6 +2,7 @@ package example
 
 import (
 	"github.com/hrtshu/url-shortener/core"
+	"github.com/hrtshu/url-shortener/db"
 	"github.com/hrtshu/url-shortener/server"
 	"log"
 )
@@ -14,7 +15,7 @@ func RunLocalhost() {
 	const scheme = "http"
 	const addr = ":8080"
 
-	db := core.NewUrlShortenerArrayDb(maxUrls)
+	db := db.NewUrlShortenerArrayDb(maxUrls)
 	shortener := core.NewUrlShortener(db, idSize)
 	shortenerServer := server.NewUrlShortenerServer(baseHostname, apiHostname, scheme, shortener)
 	log.Fatal(shortenerServer.Start(addr))
